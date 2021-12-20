@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 @RestController
 public class FilteringController {
 
-	//field1,field2
+	// field1,field2
 	@GetMapping("/filtering")
 	public MappingJacksonValue retrieveSomebean() {
 		SomeBean someBean = new SomeBean("value1", "value2", "value3");
@@ -24,8 +24,8 @@ public class FilteringController {
 		mapping.setFilters(filters);
 		return mapping;
 	}
-	
-	//field2,field3
+
+	// field2,field3
 	@GetMapping("/filtering-list")
 	public MappingJacksonValue retrieveListOfSomebean() {
 		List<SomeBean> list = Arrays.asList(new SomeBean("value1", "value2", "value3"),

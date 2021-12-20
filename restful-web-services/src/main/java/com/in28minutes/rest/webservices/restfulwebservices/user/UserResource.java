@@ -17,45 +17,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@RestController 
+@RestController
 public class UserResource {
-	
+
 	@Autowired
 	private UserDaoService service;
 
 	@GetMapping("/users")
-	public List<User> retrievAllUsers(){
+	public List<User> retrievAllUsers() {
 		return service.findAll();
 	}
-	
+
 	@GetMapping("/users/{id}")
 	public EntityModel<User> retrieveUser(@PathVariable int id) {
 		User user = service.findOne(id);
-		if(user == null) {
+		if (user == null) {
 			throw new UserNotFoundException("id-" + id);
 		}
 		EntityModel<User> model = EntityModel.of(user);
 		WebMvcLinkBuilder linkToUser = linkTo(methodOn(this.getClass()).retrievAllUsers());
 		model.add(linkToUser.withRel("all-users"));
 		return model;
-	
+
 	}
+
 	@PostMapping("/users")
-	public  ResponseEntity<Object> createuser(@Valid @RequestBody User user) {
+	public ResponseEntity<Object> createuser(@Valid @RequestBody User user) {
 		User savedUser = service.save(user);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-			.path("/{id}")
-			.buildAndExpand(savedUser.getId())
-			.toUri();
-		return ResponseEntity.created(location).build(); 
-		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId())
+				.toUri();
+		return ResponseEntity.created(location).build();
+
 	}
-	
+
 	@DeleteMapping("/users/{id}")
 	public void deleteUser(@PathVariable int id) {
 		User user = service.deleteById(id);
-		
-		if(user == null) {
+
+		if (user == null) {
 			throw new UserNotFoundException("id-" + id);
 		}
 	}

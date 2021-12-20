@@ -15,8 +15,8 @@ public class Post {
 	@GeneratedValue
 	private Integer id;
 	private String description;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 
 	public Integer getId() {
