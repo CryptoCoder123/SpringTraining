@@ -26,7 +26,7 @@ public class User {
 	private Date birthdate;
 
 	@OneToMany(mappedBy = "user")
-	private List<Post> post;
+	private List<Post> posts;
 
 	protected User() {
 
@@ -62,11 +62,11 @@ public class User {
 	}
 
 	public List<Post> getPost() {
-		return post;
+		return posts;
 	}
 
 	public void setPost(List<Post> post) {
-		this.post = post;
+		this.posts = post;
 	}
 
 	public User(Integer id, String name, Date birthdate) {
