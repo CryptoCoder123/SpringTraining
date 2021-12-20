@@ -18,47 +18,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@RestController 
+@RestController
 public class UserJPAResource {
-	
+
 //	@Autowired
 //	private UserDaoService service;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
 	@GetMapping("/jpa/users")
-	public List<User> retrievAllUsers(){
+	public List<User> retrievAllUsers() {
 		return userRepository.findAll();
 	}
-	
+
 	@GetMapping("/jpa/users/{id}")
 	public EntityModel<User> retrieveUser(@PathVariable int id) {
 		Optional<User> user = userRepository.findById(id);
-		if(!user.isPresent()) {
+		if (!user.isPresent()) {
 			throw new UserNotFoundException("id-" + id);
 		}
 		EntityModel<User> model = EntityModel.of(user.get());
 		WebMvcLinkBuilder linkToUser = linkTo(methodOn(this.getClass()).retrievAllUsers());
 		model.add(linkToUser.withRel("all-users"));
 		return model;
-	
+
 	}
+
 	@PostMapping("/jpa/users")
-	public  ResponseEntity<Object> createuser(@Valid @RequestBody User user) {
+	public ResponseEntity<Object> createuser(@Valid @RequestBody User user) {
 		User savedUser = userRepository.save(user);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-			.path("/{id}")
-			.buildAndExpand(savedUser.getId())
-			.toUri();
-		return ResponseEntity.created(location).build(); 
-		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId())
+				.toUri();
+		return ResponseEntity.created(location).build();
+
 	}
-	
+
 	@DeleteMapping("/jpa/users/{id}")
 	public void deleteUser(@PathVariable int id) {
 		userRepository.deleteById(id);
-		
+
 	}
 
 }
